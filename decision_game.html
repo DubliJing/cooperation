@@ -156,13 +156,16 @@
   </div>
 
 <script>
+  // 🔒 独立存储命名空间（晶晶 & 晖晖）
+  const keyPrefix = "jjhh_";
+
   window.onload = loadIdeas;
 
   function saveIdea(side) {
     const input = document.getElementById(side + "Input");
     const value = input.value.trim();
     if (!value) { alert("请输入内容！"); return; }
-    const key = side + "Ideas";
+    const key = keyPrefix + side + "Ideas";
     let ideas = JSON.parse(localStorage.getItem(key) || "[]");
     ideas.push(value);
     localStorage.setItem(key, JSON.stringify(ideas));
@@ -173,7 +176,7 @@
   function loadIdeas() {
     ["red", "blue"].forEach(side => {
       const listEl = document.getElementById(side + "List");
-      const ideas = JSON.parse(localStorage.getItem(side + "Ideas") || "[]");
+      const ideas = JSON.parse(localStorage.getItem(keyPrefix + side + "Ideas") || "[]");
       if (ideas.length === 0) {
         listEl.innerHTML = "<em>暂无内容~</em>";
         return;
@@ -186,19 +189,19 @@
   }
 
   function moveToTrash(side, index) {
-    let ideas = JSON.parse(localStorage.getItem(side + "Ideas") || "[]");
-    let trash = JSON.parse(localStorage.getItem("trash") || "[]");
+    let ideas = JSON.parse(localStorage.getItem(keyPrefix + side + "Ideas") || "[]");
+    let trash = JSON.parse(localStorage.getItem(keyPrefix + "trash") || "[]");
     const item = { side, text: ideas[index] };
     ideas.splice(index, 1);
     trash.push(item);
-    localStorage.setItem(side + "Ideas", JSON.stringify(ideas));
-    localStorage.setItem("trash", JSON.stringify(trash));
+    localStorage.setItem(keyPrefix + side + "Ideas", JSON.stringify(ideas));
+    localStorage.setItem(keyPrefix + "trash", JSON.stringify(trash));
     loadIdeas();
   }
 
   function loadTrash() {
     const list = document.getElementById("trashList");
-    const trash = JSON.parse(localStorage.getItem("trash") || "[]");
+    const trash = JSON.parse(localStorage.getItem(keyPrefix + "trash") || "[]");
     if (trash.length === 0) {
       list.innerHTML = "<em>删除库为空~</em>";
       return;
@@ -210,27 +213,27 @@
   }
 
   function restoreItem(index) {
-    let trash = JSON.parse(localStorage.getItem("trash") || "[]");
+    let trash = JSON.parse(localStorage.getItem(keyPrefix + "trash") || "[]");
     const { side, text } = trash[index];
-    let ideas = JSON.parse(localStorage.getItem(side + "Ideas") || "[]");
+    let ideas = JSON.parse(localStorage.getItem(keyPrefix + side + "Ideas") || "[]");
     ideas.push(text);
     trash.splice(index, 1);
-    localStorage.setItem(side + "Ideas", JSON.stringify(ideas));
-    localStorage.setItem("trash", JSON.stringify(trash));
+    localStorage.setItem(keyPrefix + side + "Ideas", JSON.stringify(ideas));
+    localStorage.setItem(keyPrefix + "trash", JSON.stringify(trash));
     loadIdeas();
   }
 
   function deleteForever(index) {
     if (!confirm("确定永久删除这个想法吗？")) return;
-    let trash = JSON.parse(localStorage.getItem("trash") || "[]");
+    let trash = JSON.parse(localStorage.getItem(keyPrefix + "trash") || "[]");
     trash.splice(index, 1);
-    localStorage.setItem("trash", JSON.stringify(trash));
+    localStorage.setItem(keyPrefix + "trash", JSON.stringify(trash));
     loadTrash();
   }
 
   function decide() {
-    const redIdeas = JSON.parse(localStorage.getItem("redIdeas") || "[]");
-    const blueIdeas = JSON.parse(localStorage.getItem("blueIdeas") || "[]");
+    const redIdeas = JSON.parse(localStorage.getItem(keyPrefix + "redIdeas") || "[]");
+    const blueIdeas = JSON.parse(localStorage.getItem(keyPrefix + "blueIdeas") || "[]");
     if (redIdeas.length === 0 && blueIdeas.length === 0) {
       document.getElementById("result").innerHTML = "请先保存一些想法！";
       return;
@@ -255,11 +258,12 @@
 
   function clearAll() {
     if (confirm("确定要清空全部记录和删除库吗？")) {
-      ["redIdeas", "blueIdeas", "trash"].forEach(k => localStorage.removeItem(k));
+      ["redIdeas", "blueIdeas", "trash"].forEach(k => localStorage.removeItem(keyPrefix + k));
       loadIdeas();
       document.getElementById("result").innerHTML = "";
     }
   }
 </script>
+
 </body>
 </html>
