@@ -5,20 +5,87 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>🎯 晶晶 ❤️ & 晖晖 💙 抽签盒</title>
 <style>
-  body {
+  /* body {
     font-family: "Helvetica Neue", sans-serif;
     background-color: #f7f8fc;
     display: flex;
     flex-direction: column;
     align-items: center;
     padding-top: 50px;
-  }
+  } */
+    /* body {
+    /* font-family: "Helvetica Neue", sans-serif; */
+    /* background: linear-gradient(180deg, #f9faff 0%, #fff5f7 100%); */
+    /* background-color: #75c492; /* 柔粉底色 */
+    /* display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 60px 0;
+    min-height: 100vh;
+    } */ 
+     body {
+  background: 
+    linear-gradient(rgba(239, 247, 243, 0.55), rgba(239, 247, 243, 0.55)),
+    url("https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1600&q=80");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 60px 0;
+  min-height: 100vh;
+}
+
+    .main-container {
+  /* background: linear-gradient(180deg, #ffeef2 0%, #fff7fa 100%); */
+  background: #ffffff; /* 内部区域纯白 */
+  border-radius: 24px;
+  box-shadow: 0 4px 24px rgba(255, 170, 185, 0.25);
+  padding: 50px 60px;
+  width: min(90%, 720px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+
   h1 {
     font-size: 1.8em;
     display: flex;
     align-items: center;
     gap: 8px;
+    position: relative;
   }
+  #cloudSync {
+    position: absolute;
+    right: -40px;
+    top: 2px;
+    cursor: pointer;
+    opacity: 0.85;
+    transition: 0.3s;
+  }
+  #cloudSync:hover {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+  #cloudSync svg {
+    width: 26px;
+    height: 26px;
+    stroke: #9ac7ff;
+    stroke-width: 1.8;
+    fill: none;
+  }
+  #cloudSync.rotating {
+    animation: spin 2s linear infinite;
+    filter: drop-shadow(0 0 4px rgba(150, 200, 255, 0.6));
+  }
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
   .input-section {
     display: flex;
     gap: 60px;
@@ -64,8 +131,17 @@
   .buttons {
     margin-top: 30px;
     display: flex;
-    gap: 20px;
+    gap: 10px;
   }
+
+  /* .buttons {
+  margin-top: 20px;       /* 缩小与上方输入框的距离 */
+  margin-bottom: 1px;    /* 增加下方内容的贴合感 */
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+    } */
+
 
   .result {
     margin-top: 40px;
@@ -112,21 +188,40 @@
   .small-btn:hover { background-color: #888; }
 
   .trash .tag { opacity: 0.8; }
+  .status {
+    margin-top: 10px;
+    font-size: 0.9em;
+    color: #8fb3ff; /* 默认浅蓝 */
+    transition: color 0.3s;
+  }
+
+  .status.success {
+  color: #ffb7c5; /* ✅ 成功提示为浅粉 */
+}
 </style>
 </head>
 <body>
-  <h1>🎯 晶晶 ❤️ & 晖晖 💙 抽签盒</h1>
+  <div class="main-container">
 
-  <div class="input-section">
-    <div class="player">
-      <label style="color:#ff6666;">晶晶 ❤️：</label>
-      <input id="redInput" placeholder="输入晶晶的想法">
-      <button class="red-btn" onclick="saveIdea('red')">保存晶晶的想法</button>
-    </div>
-    <div class="player">
-      <label style="color:#6699ff;">晖晖 💙：</label>
-      <input id="blueInput" placeholder="输入晖晖的想法">
-      <button class="blue-btn" onclick="saveIdea('blue')">保存晖晖的想法</button>
+    <h1>
+        💌 晶晶 🌸 & 晖晖 🦋 抽签盒
+        <span id="cloudSync" title="点击手动同步">
+        <svg viewBox="0 0 24 24"><path d="M3 15a4 4 0 0 1 4-4h1a5 5 0 0 1 9.9 1H19a3 3 0 0 1 0 6H8a5 5 0 0 1-5-5Z"/></svg>
+        </span>
+    </h1>
+    <div class="status" id="status">☁️ 云端同步未开始</div>
+
+    <div class="input-section">
+        <div class="player">
+        <label style="color:#ff6666;">晶晶 🌸：</label>
+        <input id="redInput" placeholder="输入晶晶的想法">
+        <button class="red-btn" onclick="saveIdea('red')">保存晶晶的想法</button>
+        </div>
+        <div class="player">
+        <label style="color:#6699ff;">晖晖 🦋：</label>
+        <input id="blueInput" placeholder="输入晖晖的想法">
+        <button class="blue-btn" onclick="saveIdea('blue')">保存晖晖的想法</button>
+        </div>
     </div>
   </div>
 
@@ -137,133 +232,119 @@
   <div class="result" id="result"></div>
 
   <div class="storage">
-    <h3>📦 已保存的想法</h3>
-    <div>
-      <strong style="color:#ff6666;">晶晶 ❤️：</strong>
-      <div id="redList"></div>
-    </div>
-    <div style="margin-top:15px;">
-      <strong style="color:#6699ff;">晖晖 💙：</strong>
-      <div id="blueList"></div>
-    </div>
+    <h3> 📬已保存的想法</h3>
+    <div><strong style="color:#ff6666;">晶晶 🌸：</strong><div id="redList"></div></div>
+    <div style="margin-top:15px;"><strong style="color:#6699ff;">晖晖 🦋：</strong><div id="blueList"></div></div>
   </div>
 
   <div class="trash">
-    <h3>🗑️ 删除库 
-      <button class="small-btn" onclick="clearAll()">清空全部</button>
-    </h3>
+    <h3>🗑️ 删除库 <button class="small-btn" onclick="clearAll()">清空全部</button></h3>
     <div id="trashList"></div>
   </div>
 
 <script>
-  // 🔒 独立存储命名空间（晶晶 & 晖晖）
-  const keyPrefix = "jjhh_";
+const BIN_ID = "6905bfb243b1c97be99046f1";
+const API_KEY = "$2a$10$Ozq5MzSkKtHX4.ihnr6N1epNk.Iy1iBKk0ET1/28gjkJYxgbCIrZ2";
+const BASE = "https://api.jsonbin.io/v3";
+const headers = { "Content-Type":"application/json", "X-Master-Key":API_KEY, "X-Bin-Meta":"false" };
+const keyPrefix = "jjhh_";
+let state = { redIdeas: [], blueIdeas: [], trash: [] };
+const $ = id => document.getElementById(id);
 
-  window.onload = loadIdeas;
+async function fetchBin() {
+  const r = await fetch(`${BASE}/b/${BIN_ID}/latest`, { headers });
+  if (!r.ok) throw new Error("读取失败 " + r.status);
+  return r.json();
+}
+async function putBin(data) {
+  const r = await fetch(`${BASE}/b/${BIN_ID}`, { method:"PUT", headers, body:JSON.stringify(data) });
+  if (!r.ok) throw new Error("保存失败 " + r.status);
+  return r.json();
+}
 
-  function saveIdea(side) {
-    const input = document.getElementById(side + "Input");
-    const value = input.value.trim();
-    if (!value) { alert("请输入内容！"); return; }
-    const key = keyPrefix + side + "Ideas";
-    let ideas = JSON.parse(localStorage.getItem(key) || "[]");
-    ideas.push(value);
-    localStorage.setItem(key, JSON.stringify(ideas));
-    input.value = "";
-    loadIdeas();
+function render() {
+  const list = (arr, side) => arr.length ? arr.map((v,i)=>`<span class="tag ${side}-tag" onclick="moveToTrash('${side}',${i})">${v}</span>`).join("") : "<em>暂无内容~</em>";
+  $("redList").innerHTML = list(state.redIdeas, "red");
+  $("blueList").innerHTML = list(state.blueIdeas, "blue");
+  $("trashList").innerHTML = state.trash.length ? state.trash.map((x,i)=>`
+    <span class="tag ${x.side}-tag" onclick="restoreItem(${i})">${x.text}</span>
+    <button class="small-btn" onclick="deleteForever(${i})">永久删除</button>
+  `).join("<br>") : "<em>删除库为空~</em>";
+}
+
+// function setStatus(text){$("status").textContent = text;}
+function setStatus(text, type){
+  const el = $("status");
+  el.textContent = text;
+  el.className = "status" + (type ? " " + type : "");
+}
+
+async function syncCloud() {
+  const icon = $("cloudSync");
+  icon.classList.add("rotating");
+  setStatus("☁️ 正在同步中…");
+  try {
+    const d = await fetchBin();
+    state = { redIdeas: d.redIdeas||[], blueIdeas: d.blueIdeas||[], trash: d.trash||[] };
+    render();
+    setStatus("☁️ 已同步到云端");
+  } catch (e) {
+    setStatus("同步失败：" + e.message);
+  } finally {
+    icon.classList.remove("rotating");
   }
+}
 
-  function loadIdeas() {
-    ["red", "blue"].forEach(side => {
-      const listEl = document.getElementById(side + "List");
-      const ideas = JSON.parse(localStorage.getItem(keyPrefix + side + "Ideas") || "[]");
-      if (ideas.length === 0) {
-        listEl.innerHTML = "<em>暂无内容~</em>";
-        return;
-      }
-      listEl.innerHTML = ideas.map((idea, idx) =>
-        `<span class="tag ${side}-tag" onclick="moveToTrash('${side}', ${idx})" title='点击删除此项'>${idea}</span>`
-      ).join("");
-    });
-    loadTrash();
+async function saveIdea(side){
+  const input = $(side+"Input");
+  const v = input.value.trim();
+  if(!v) return alert("请输入内容！");
+  state[side+"Ideas"].push(v);
+  render();
+  input.value = "";
+  try{
+    setStatus("☁️ 保存中…");
+    await putBin(state);
+    setStatus("✨ 保存成功并同步到云端", "success");
+  }catch(e){
+    setStatus("保存失败：" + e.message);
   }
+}
 
-  function moveToTrash(side, index) {
-    let ideas = JSON.parse(localStorage.getItem(keyPrefix + side + "Ideas") || "[]");
-    let trash = JSON.parse(localStorage.getItem(keyPrefix + "trash") || "[]");
-    const item = { side, text: ideas[index] };
-    ideas.splice(index, 1);
-    trash.push(item);
-    localStorage.setItem(keyPrefix + side + "Ideas", JSON.stringify(ideas));
-    localStorage.setItem(keyPrefix + "trash", JSON.stringify(trash));
-    loadIdeas();
+function moveToTrash(side,i){
+  const it={side,text:state[side+"Ideas"][i]};
+  state[side+"Ideas"].splice(i,1);
+  state.trash.push(it);
+  render(); putBin(state);
+}
+function restoreItem(i){
+  const {side,text}=state.trash[i];
+  state[side+"Ideas"].push(text);
+  state.trash.splice(i,1);
+  render(); putBin(state);
+}
+function deleteForever(i){
+  if(!confirm("确定永久删除吗？"))return;
+  state.trash.splice(i,1);
+  render(); putBin(state);
+}
+function decide(){
+  const red=state.redIdeas,blue=state.blueIdeas;
+  if(!red.length&&!blue.length) return $("result").textContent="请先保存一些想法！";
+  let s=Math.random()<0.5?"red":"blue";
+  if(s==="red"&&!red.length)s="blue";if(s==="blue"&&!blue.length)s="red";
+  const pool=state[s+"Ideas"],choice=pool[Math.floor(Math.random()*pool.length)];
+  $("result").innerHTML=s==="red"?`<span style="color:#ff6666;">今天选中晶晶 ❤️：</span><span class="tag red-tag" style="font-size:1.3em;">${choice}</span>`:`<span style="color:#6699ff;">今天选中晖晖 💙：</span><span class="tag blue-tag" style="font-size:1.3em;">${choice}</span>`;
+}
+function clearAll(){
+  if(confirm("确定清空全部记录和删除库吗？")){
+    state={redIdeas:[],blueIdeas:[],trash:[]};
+    render(); putBin(state);
   }
+}
 
-  function loadTrash() {
-    const list = document.getElementById("trashList");
-    const trash = JSON.parse(localStorage.getItem(keyPrefix + "trash") || "[]");
-    if (trash.length === 0) {
-      list.innerHTML = "<em>删除库为空~</em>";
-      return;
-    }
-    list.innerHTML = trash.map((item, i) => `
-      <span class="tag ${item.side}-tag" title="点击恢复" onclick="restoreItem(${i})">${item.text}</span>
-      <button class="small-btn" onclick="deleteForever(${i})">永久删除</button>
-    `).join("<br>");
-  }
-
-  function restoreItem(index) {
-    let trash = JSON.parse(localStorage.getItem(keyPrefix + "trash") || "[]");
-    const { side, text } = trash[index];
-    let ideas = JSON.parse(localStorage.getItem(keyPrefix + side + "Ideas") || "[]");
-    ideas.push(text);
-    trash.splice(index, 1);
-    localStorage.setItem(keyPrefix + side + "Ideas", JSON.stringify(ideas));
-    localStorage.setItem(keyPrefix + "trash", JSON.stringify(trash));
-    loadIdeas();
-  }
-
-  function deleteForever(index) {
-    if (!confirm("确定永久删除这个想法吗？")) return;
-    let trash = JSON.parse(localStorage.getItem(keyPrefix + "trash") || "[]");
-    trash.splice(index, 1);
-    localStorage.setItem(keyPrefix + "trash", JSON.stringify(trash));
-    loadTrash();
-  }
-
-  function decide() {
-    const redIdeas = JSON.parse(localStorage.getItem(keyPrefix + "redIdeas") || "[]");
-    const blueIdeas = JSON.parse(localStorage.getItem(keyPrefix + "blueIdeas") || "[]");
-    if (redIdeas.length === 0 && blueIdeas.length === 0) {
-      document.getElementById("result").innerHTML = "请先保存一些想法！";
-      return;
-    }
-
-    const side = Math.random() < 0.5 ? "red" : "blue";
-    const pool = side === "red" ? redIdeas : blueIdeas;
-    if (pool.length === 0) {
-      document.getElementById("result").innerHTML =
-        side === "red"
-          ? `<span style="color:#ff6666;">今天选中晶晶 ❤️：</span>（暂无内容）`
-          : `<span style="color:#6699ff;">今天选中晖晖 💙：</span>（暂无内容）`;
-      return;
-    }
-
-    const choice = pool[Math.floor(Math.random() * pool.length)];
-    document.getElementById("result").innerHTML =
-      side === "red"
-        ? `<span style="color:#ff6666;">今天选中晶晶 ❤️：</span><span class="tag red-tag" style="font-size:1.3em;">${choice}</span>`
-        : `<span style="color:#6699ff;">今天选中晖晖 💙：</span><span class="tag blue-tag" style="font-size:1.3em;">${choice}</span>`;
-  }
-
-  function clearAll() {
-    if (confirm("确定要清空全部记录和删除库吗？")) {
-      ["redIdeas", "blueIdeas", "trash"].forEach(k => localStorage.removeItem(keyPrefix + k));
-      loadIdeas();
-      document.getElementById("result").innerHTML = "";
-    }
-  }
+$("cloudSync").onclick=syncCloud;
+syncCloud();
 </script>
-
 </body>
 </html>
